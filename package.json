@@ -1,0 +1,21 @@
+{
+  "name": "generaltests",
+  "version": "1.0.0",
+  "main": "cypress.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "cypress": "^14.5.4"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "cypress-axe": "^1.6.0",
+    "dayjs": "^1.11.13",
+    "pdf-parse": "^1.1.1"
+  }
+}

@@ -1,0 +1,94 @@
+# .github/workflows/cypress-daily.yml
+name: Cypress Daily Run (Cypress Cloud)
+
+on:
+  # schedule:
+  # - cron: "0 6 * * *" # daily at 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Enter the Base URL (Remove the front slash at the end)"
+        required: false
+        default: "https://example.cypress.io"
+        type: string
+
+      includeExternalLinks:
+        type: boolean
+        required: true
+        default: false
+        description: "Include external links in the crawler test?"
+
+      authenticationRequired:
+        description: "Use Basic Authentication?"
+        required: true
+        default: false
+        type: boolean
+
+      username:
+        description: "Basic Auth Username"
+        required: false
+        type: string
+
+      password:
+        description: "Basic Auth Password"
+        required: false
+        type: string
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress Regression (Scheduled)
+        if: github.event_name == 'schedule'
+        uses: cypress-io/github-action@v6
+        with:
+          record: true
+          browser: chrome
+          tag: "scheduledRun_githubActions"
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_SKIP_COMMIT_INFO: 1
+          CYPRESS_baseUrl: "https://example.cypress.io"
+
+      - name: Run Cypress Regression (Manual)
+        if: github.event_name == 'workflow_dispatch'
+        uses: cypress-io/github-action@v6
+        with:
+          record: true
+          browser: chrome
+          tag: "manualTrigger_githubActions"
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_SKIP_COMMIT_INFO: 1
+          CYPRESS_baseUrl: ${{ inputs.url }}
+          CYPRESS_INCLUDE_EXTERNAL_LINKS: ${{inputs.includeExternalLinks}}
+          CYPRESS_AUTH_REQUIRED: ${{ inputs.authenticationRequired }}
+          CYPRESS_AUTH_USERNAME: ${{ inputs.username }}
+          CYPRESS_AUTH_PASSWORD: ${{ inputs.password }}
+
+      - name: Upload Cypress JSON files (Click the hyperlink below)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-json-results
+          path: cypress/downloads/*.json
+
+      - name: Cache Node.js modules # Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
