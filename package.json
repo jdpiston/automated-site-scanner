@@ -10,7 +10,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "cypress": "^14.5.4"
+    "cypress": "^16.0.0"
   },
   "dependencies": {
     "cheerio": "^1.2.0",

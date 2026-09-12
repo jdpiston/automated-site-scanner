@@ -4,7 +4,7 @@ const pdf = require("pdf-parse")
 const path = require("path")
 
 module.exports = defineConfig({
-  projectId: "grm21s",
+  projectId: "tuwdfc",
   experimentalMemoryManagement: true,
   numTestsKeptInMemory: 10,
   e2e: {
