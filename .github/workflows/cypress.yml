@@ -3,7 +3,7 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    # Runs tests in parallel with matrix strategy https://on.cypress.io/parallelization
+    # Runs tests in parallel with matrix strategy https://on.cypress.io/parallelization     test
     # https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/run-job-variations
     # Also see warning here https://github.com/cypress-io/github-action#parallel
     strategy:
