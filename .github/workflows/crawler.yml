@@ -1,5 +1,5 @@
 # .github/workflows/cypress-daily.yml
-name: Cypress Daily Run (Cypress Cloud)
+name: Crawler and Accessibility checks
 
 on:
   # schedule:
